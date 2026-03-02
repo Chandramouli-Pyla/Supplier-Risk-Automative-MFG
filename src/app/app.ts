@@ -1,12 +1,14 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { AppSidebarComponent } from './components/app-sidebar/app-sidebar';
+import { AppHeaderComponent } from './components/app-header/app-header';
+import { SuppliersComponent } from './suppliers/suppliers';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [AppSidebarComponent, AppHeaderComponent, SuppliersComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('supply-risk-angular');
+export class AppComponent {
+  title = 'supply-risk-angular';
 }
