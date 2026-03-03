@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router'; 
 import { 
   LucideAngularModule, 
   Shield, 
@@ -15,21 +16,19 @@ import {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, RouterModule], 
   templateUrl: './app-sidebar.html',
 })
 export class AppSidebarComponent {
-  // Expose specific standalone icons to the template
   readonly Shield = Shield;
   readonly Settings = Settings;
 
-  // Navigation items array to keep the HTML clean
   navItems = [
-    { name: 'Dashboard', icon: LayoutGrid, active: false },
-    { name: 'Suppliers', icon: Users, active: true },
-    { name: 'Risk Assessment', icon: ShieldAlert, active: false },
-    { name: 'Performance', icon: TrendingUp, active: false },
-    { name: 'Alerts', icon: AlertTriangle, active: false },
-    { name: 'Reports', icon: FileText, active: false },
+    { name: 'Dashboard', icon: LayoutGrid, route: '/dashboard' },
+    { name: 'Suppliers', icon: Users, route: '/suppliers' },
+    { name: 'Risk Assessment', icon: ShieldAlert, route: '/risk' },
+    { name: 'Performance', icon: TrendingUp, route: '/performance' },
+    { name: 'Alerts', icon: AlertTriangle, route: '/alerts' },
+    { name: 'Reports', icon: FileText, route: '/reports' },
   ];
 }
