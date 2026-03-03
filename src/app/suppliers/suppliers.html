@@ -1,24 +1,25 @@
-<div class="p-8 w-full max-w-[1600px] mx-auto flex items-start gap-6">
+<div class="p-8 w-full max-w-[1600px] mx-auto flex flex-col gap-6">
   
-  <div class="flex-1 flex flex-col gap-6 min-w-0">
-    
-    <app-supplier-filters 
-      (filterChange)="onFilterChange($event)">
-    </app-supplier-filters>
+  <app-supplier-filters 
+    (filterChange)="onFilterChange($event)">
+  </app-supplier-filters>
 
-    <app-suppliers-table 
-      [suppliers]="filteredSuppliers" 
-      [selectedSupplierId]="selectedSupplier?.id"
-      (selectSupplier)="onSelectSupplier($event)">
-    </app-suppliers-table>
+  <div class="flex items-start gap-6">
+    <div class="flex-1 min-w-0">
+      <app-suppliers-table 
+        [suppliers]="filteredSuppliers" 
+        [selectedSupplierId]="selectedSupplier?.id"
+        (selectSupplier)="onSelectSupplier($event)">
+      </app-suppliers-table>
+    </div>
 
+    @if (selectedSupplier) {
+      <app-supplier-detail-panel 
+        [supplier]="selectedSupplier" 
+        (closePanel)="onClosePanel()"
+        class="w-[400px] shrink-0 sticky top-8">
+      </app-supplier-detail-panel>
+    }
   </div>
 
-  @if (selectedSupplier) {
-    <app-supplier-detail-panel 
-      [supplier]="selectedSupplier" 
-      (closePanel)="onClosePanel()"
-      class="w-96 shrink-0 sticky top-8">
-    </app-supplier-detail-panel>
-  }
 </div>
