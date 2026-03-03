@@ -1,0 +1,165 @@
+<div class="rounded-xl border border-neutral-800 bg-neutral-950/40 p-4">
+  @if (!supplier) {
+    <div class="flex flex-col items-center justify-center py-12">
+      <lucide-icon [img]="AlertTriangle" class="h-12 w-12 text-neutral-500 mb-4"></lucide-icon>
+
+      <h3 class="text-lg font-medium text-white mb-2">No Supplier Selected</h3>
+
+      <p class="text-sm text-neutral-500 text-center max-w-md">
+        Select a supplier from the risk matrix above to begin a new risk assessment
+      </p>
+    </div>
+  } @else {
+    <div class="flex items-start justify-between gap-4 pb-2">
+      <div>
+        <div class="text-base font-medium text-white">
+          Risk Assessment for {{ supplier.name }}
+        </div>
+        <p class="text-sm text-neutral-500 mt-1">
+          {{ supplier.code }} • {{ supplier.category }}
+        </p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="text-right">
+          <p class="text-sm text-neutral-500">Calculated Risk Score</p>
+          <div class="flex items-center gap-2 justify-end mt-1">
+            <span class="text-2xl font-semibold text-white">{{ avgRisk }}</span>
+            <span
+              class="inline-flex items-center px-2.5 py-1 rounded-md border text-xs font-semibold capitalize"
+              [class]="riskBadgeClass(riskLevel)"
+            >
+              {{ riskLevel }}
+            </span>
+          </div>
+        </div>
+
+     
+        <button
+          type="button"
+          (click)="onClose()"
+          class="h-9 w-9 rounded-md hover:bg-neutral-900/60 border border-neutral-800 flex items-center justify-center text-neutral-300"
+          title="Close"
+        >
+          <lucide-icon [img]="X" class="h-4 w-4"></lucide-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-4 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+     
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-white">Quality Risk</span>
+          <span class="text-sm font-medium text-neutral-400">{{ qualityRisk }}%</span>
+        </div>
+
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          [(ngModel)]="qualityRisk"
+          class="w-full accent-blue-500"
+        />
+
+        <p class="text-xs text-neutral-500">
+          Current score: {{ supplier.qualityScore }}%
+        </p>
+      </div>
+
+
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-white">Delivery Risk</span>
+          <span class="text-sm font-medium text-neutral-400">{{ deliveryRisk }}%</span>
+        </div>
+
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          [(ngModel)]="deliveryRisk"
+          class="w-full accent-blue-500"
+        />
+
+        <p class="text-xs text-neutral-500">
+          Current score: {{ supplier.deliveryScore }}%
+        </p>
+      </div>
+
+   
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-white">Cost Risk</span>
+          <span class="text-sm font-medium text-neutral-400">{{ costRisk }}%</span>
+        </div>
+
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          [(ngModel)]="costRisk"
+          class="w-full accent-blue-500"
+        />
+
+        <p class="text-xs text-neutral-500">
+          Current score: {{ supplier.costScore }}%
+        </p>
+      </div>
+
+   
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-white">Compliance Risk</span>
+          <span class="text-sm font-medium text-neutral-400">{{ complianceRisk }}%</span>
+        </div>
+
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          [(ngModel)]="complianceRisk"
+          class="w-full accent-blue-500"
+        />
+
+        <p class="text-xs text-neutral-500">
+          Current score: {{ supplier.complianceScore }}%
+        </p>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="mt-6 space-y-3">
+      <label class="text-sm font-medium text-white">Assessment Notes</label>
+      <textarea
+        [(ngModel)]="notes"
+        placeholder="Add notes about this risk assessment..."
+        class="min-h-[100px] w-full bg-neutral-900/50 border border-neutral-800 rounded-md p-3 text-sm text-white
+               focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder:text-neutral-600"
+      ></textarea>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-6 flex items-center justify-end gap-4">
+      <button
+        type="button"
+        (click)="onClose()"
+        class="px-4 py-2 rounded-md border border-neutral-800 hover:bg-neutral-900/60 text-neutral-200 text-sm font-semibold transition"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center gap-2"
+      >
+        <lucide-icon [img]="CheckCircle2" class="h-4 w-4"></lucide-icon>
+        Save Assessment
+      </button>
+    </div>
+  }
+</div>

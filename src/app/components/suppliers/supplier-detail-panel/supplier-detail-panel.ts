@@ -13,7 +13,6 @@ export class SupplierDetailPanelComponent {
   @Input() supplier: Supplier | null = null;
   @Output() closePanel = new EventEmitter<void>();
 
-  // Icons - MUST be listed here to use in HTML
   readonly X = X;
   readonly MapPin = MapPin;
   readonly User = User;
@@ -25,7 +24,7 @@ export class SupplierDetailPanelComponent {
   readonly DollarSign = DollarSign;
   readonly ClipboardCheck = ClipboardCheck;
 
-  // Utils
+
   getRiskBgColor = getRiskBgColor;
   getRiskColor = getRiskColor;
   getStatusColor = getStatusColor;

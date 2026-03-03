@@ -1,0 +1,41 @@
+<div class="rounded-xl border border-neutral-800 bg-neutral-950/40 p-4">
+  <div class="flex items-center justify-between pb-2">
+    <div class="text-base font-medium text-white">Highest Risk Suppliers</div>
+
+    <a routerLink="/suppliers" class="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1">
+      View all <lucide-icon [img]="ArrowRight" class="h-4 w-4"></lucide-icon>
+    </a>
+  </div>
+
+  <div class="mt-10 space-y-15">
+    @for (s of list; track s.id) {
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-white">{{ s.name }}</p>
+            <p class="text-xs text-neutral-500">{{ s.category }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-xs px-2 py-1 rounded-md border"
+                  [class]="getStatusColor(s.status)">
+              {{ (s.status || '').replace('-', ' ') }}
+            </span>
+
+            <span class="text-xs px-2 py-1 rounded-md border"
+                  [class]="getRiskBgColor(s.riskLevel)">
+              {{ s.riskScore }}
+            </span>
+          </div>
+        </div>
+
+        <div class="h-1.5 w-full rounded-full bg-neutral-900 overflow-hidden">
+          <div class="h-1.5 rounded-full"
+               [style.width.%]="s.riskScore"
+               [style.backgroundColor]="progressColor(s.riskLevel)">
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

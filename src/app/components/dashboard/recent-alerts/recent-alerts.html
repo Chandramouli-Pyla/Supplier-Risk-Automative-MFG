@@ -1,0 +1,31 @@
+<div class="rounded-xl border border-neutral-800 bg-neutral-950/40 p-4">
+  <div class="flex items-center justify-between pb-2">
+    <div class="text-base font-medium text-white">Recent Alerts</div>
+
+    <a routerLink="/alerts" class="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1">
+      View all <lucide-icon [img]="ArrowRight" class="h-4 w-4"></lucide-icon>
+    </a>
+  </div>
+
+  <div class="mt-2 space-y-4">
+    @for (a of list; track a.id) {
+      <div class="flex items-start gap-3 rounded-lg bg-neutral-900/40 p-3 border border-neutral-800/60">
+        <div class="mt-0.5 rounded-full p-1.5" [class]="getRiskBgColor(a.severity)">
+          <lucide-icon [img]="AlertTriangle" class="h-4 w-4"></lucide-icon>
+        </div>
+
+        <div class="flex-1 space-y-1">
+          <div class="flex items-center justify-between gap-3">
+            <p class="text-sm font-medium text-white">{{ a.title }}</p>
+            <span class="text-xs px-2 py-1 rounded-md border" [class]="getRiskBgColor(a.severity)">
+              {{ a.severity }}
+            </span>
+          </div>
+
+          <p class="text-xs text-neutral-500">{{ a.supplierName }}</p>
+          <p class="text-xs text-neutral-500">{{ formatDate(a.createdAt) }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

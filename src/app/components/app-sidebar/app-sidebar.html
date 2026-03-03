@@ -1,5 +1,5 @@
 <aside class="flex flex-col h-full w-full bg-[#0a0a0a]">
-  
+
   <div class="p-6 flex items-center gap-3">
     <div class="bg-blue-600 p-2 rounded-lg flex items-center justify-center">
       <lucide-icon [img]="Shield" class="h-5 w-5 text-white"></lucide-icon>
@@ -12,19 +12,20 @@
 
   <nav class="flex-1 px-4 py-2 space-y-1">
     @for (item of navItems; track item.name) {
-      <div class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors cursor-pointer"
-         [ngClass]="item.active ? 'bg-neutral-800/80 text-white font-medium' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50'">
-        <lucide-icon [img]="item.icon" class="h-4 w-4"></lucide-icon>
-        {{item.name}}
-      </div>
+    <a [routerLink]="item.path" routerLinkActive="bg-neutral-800/80 text-white font-medium" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors cursor-pointer
+             text-neutral-400 hover:text-white hover:bg-neutral-800/50">
+      <lucide-icon [img]="item.icon" class="h-4 w-4"></lucide-icon>
+      {{ item.name }}
+    </a>
     }
   </nav>
 
   <div class="p-4 mt-auto border-t border-neutral-800/50">
-    <div class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-neutral-400 hover:text-white hover:bg-neutral-800/50 transition-colors cursor-pointer">
+    <div
+      class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-neutral-400 hover:text-white hover:bg-neutral-800/50 transition-colors cursor-pointer">
       <lucide-icon [img]="Settings" class="h-4 w-4"></lucide-icon>
       Settings
     </div>
   </div>
-  
+
 </aside>

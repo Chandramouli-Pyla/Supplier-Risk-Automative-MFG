@@ -1,35 +1,33 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  LucideAngularModule, 
-  Shield, 
-  LayoutGrid, 
-  Users, 
-  ShieldAlert, 
-  TrendingUp, 
-  AlertTriangle, 
-  FileText, 
-  Settings 
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  LucideAngularModule,
+  Shield,
+  LayoutGrid,
+  Users,
+  ShieldAlert,
+  TrendingUp,
+  AlertTriangle,
+  FileText,
+  Settings
 } from 'lucide-angular';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, RouterLink, RouterLinkActive],
   templateUrl: './app-sidebar.html',
 })
 export class AppSidebarComponent {
-  // Expose specific standalone icons to the template
   readonly Shield = Shield;
   readonly Settings = Settings;
-
-  // Navigation items array to keep the HTML clean
   navItems = [
-    { name: 'Dashboard', icon: LayoutGrid, active: false },
-    { name: 'Suppliers', icon: Users, active: true },
-    { name: 'Risk Assessment', icon: ShieldAlert, active: false },
-    { name: 'Performance', icon: TrendingUp, active: false },
-    { name: 'Alerts', icon: AlertTriangle, active: false },
-    { name: 'Reports', icon: FileText, active: false },
+	{ name: 'Dashboard', icon: LayoutGrid, path: '/dashboard' },
+	{ name: 'Suppliers', icon: Users, path: '/suppliers' },
+{ name: 'Risk Assessment', icon: ShieldAlert, path: '/risk-assessment' },
+	{ name: 'Performance', icon: TrendingUp, path: '/performance' },
+	{ name: 'Alerts', icon: AlertTriangle, path: '/alerts' },
+	{ name: 'Reports', icon: FileText, path: '/reports' },
   ];
 }

@@ -1,0 +1,62 @@
+<div class="rounded-xl border border-neutral-800 bg-neutral-950/40 p-4">
+  <div class="pb-2">
+    <div class="text-base font-medium text-white">Risk vs Performance Matrix</div>
+  </div>
+
+  <div class="relative h-[350px] rounded-lg border border-neutral-800 bg-neutral-900/30 p-4">
+    <div class="absolute inset-4 grid grid-cols-2 grid-rows-2">
+      <div class="border-r border-b border-neutral-800/60 bg-emerald-500/5 flex items-center justify-center">
+        <span class="text-xs text-neutral-400">High Performance / Low Risk</span>
+      </div>
+      <div class="border-b border-neutral-800/60 bg-amber-500/5 flex items-center justify-center">
+        <span class="text-xs text-neutral-400">High Performance / High Risk</span>
+      </div>
+      <div class="border-r border-neutral-800/60 bg-amber-500/5 flex items-center justify-center">
+        <span class="text-xs text-neutral-400">Low Performance / Low Risk</span>
+      </div>
+      <div class="bg-red-500/5 flex items-center justify-center">
+        <span class="text-xs text-neutral-400">Low Performance / High Risk</span>
+      </div>
+    </div>
+
+    @for (s of suppliers; track s.id) {
+      <button
+        class="absolute z-10 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-neutral-950 transition-all hover:scale-125"
+        [class]="riskColorClass(s.riskScore) + ' ' + selectedClass(s)"
+        [style.left]="leftPct(s)"
+        [style.top]="topPct(s)"
+        (click)="onPick(s)"
+        [title]="s.name + ' - Risk: ' + s.riskScore"
+        type="button"
+      >
+        <span class="sr-only">{{ s.name }}</span>
+      </button>
+    }
+
+    <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-neutral-400">
+      Performance Score
+    </div>
+    <div class="absolute -left-6 top-1/2 -translate-y-1/2 -rotate-90 text-xs text-neutral-400">
+      Risk Score (inverted)
+    </div>
+  </div>
+
+  <div class="mt-8 flex flex-wrap items-center justify-center gap-4 text-xs">
+    <div class="flex items-center gap-2">
+      <div class="h-3 w-3 rounded-full bg-emerald-500"></div>
+      <span class="text-neutral-400">Low Risk (0-29)</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="h-3 w-3 rounded-full bg-amber-500"></div>
+      <span class="text-neutral-400">Medium Risk (30-49)</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="h-3 w-3 rounded-full bg-red-500"></div>
+      <span class="text-neutral-400">High Risk (50-69)</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="h-3 w-3 rounded-full bg-red-700"></div>
+      <span class="text-neutral-400">Critical (70+)</span>
+    </div>
+  </div>
+</div>

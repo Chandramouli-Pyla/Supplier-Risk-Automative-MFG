@@ -1,0 +1,37 @@
+<div class="grid gap-2 lg:grid-cols-2">
+  <div class="rounded-xl border border-neutral-800 bg-neutral-950/40 p-4">
+    <div class="pb-2">
+      <div class="text-base font-medium text-white">
+        Performance Trend ({{ timeRange === '6m' ? '6 Months' : (timeRange === '3m' ? '3 Months' : (timeRange === '1m' ? '1 Month' : '1 Year')) }})
+      </div>
+    </div>
+
+    <div class="h-[300px]">
+      <canvas
+        baseChart
+        [type]="trendType"
+        [data]="trendData"
+        [options]="trendOptions"
+      ></canvas>
+    </div>
+  </div>
+
+  <!-- Risk Distribution -->
+  <div class="rounded-xl border border-neutral-800 bg-neutral-950/40 p-4">
+    <div class="pb-2">
+      <div class="text-base font-medium text-white">
+        Risk Distribution Over Time
+      </div>
+    </div>
+
+    <div class="h-[300px]">
+      <canvas
+        baseChart
+        [type]="riskType"
+        [data]="riskData"
+        [options]="riskOptions"
+      ></canvas>
+    </div>
+  </div>
+
+</div>
