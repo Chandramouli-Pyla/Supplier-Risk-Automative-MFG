@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupplierFiltersComponent } from '../components/suppliers/supplier-filters/supplier-filters';
 import { SuppliersTableComponent } from '../components/suppliers/suppliers-table/suppliers-table';
 import { SupplierDetailPanelComponent } from '../components/suppliers/supplier-detail-panel/supplier-detail-panel';
-import { Supplier, suppliers as initialSuppliers } from '../lib/data';
+import { Supplier, suppliers } from '../lib/data';
 
 @Component({
   selector: 'app-suppliers',
@@ -14,63 +14,46 @@ import { Supplier, suppliers as initialSuppliers } from '../lib/data';
     SuppliersTableComponent,
     SupplierDetailPanelComponent
   ],
-  templateUrl: './suppliers.html', // Update to .component.html if needed
+  templateUrl: './suppliers.html',
 })
-export class SuppliersComponent implements OnInit {
-  allSuppliers: Supplier[] = initialSuppliers;
-  filteredSuppliers: Supplier[] = [];
+export class SuppliersComponent {
+  
+  allSuppliers: Supplier[] = suppliers;
+  
+  
+  filteredSuppliers: Supplier[] = suppliers;
+  
+  
   selectedSupplier: Supplier | null = null;
-  selectedSupplierId?: string;
-  searchQuery = '';
-  categoryFilter = 'All Categories';
-  riskFilter = 'All Risk Levels';
-  statusFilter = 'All Statuses';
 
-  ngOnInit() {
-    this.applyFilters();
-  }
 
   onSelectSupplier(supplier: Supplier) {
     this.selectedSupplier = supplier;
-    this.selectedSupplierId = supplier.id;
   }
 
-  closePanel() {
+  
+  onClosePanel() {
     this.selectedSupplier = null;
-    this.selectedSupplierId = undefined;
   }
 
-  onSearchChange(query: string) {
-    this.searchQuery = query;
-    this.applyFilters();
-  }
-
-  onCategoryChange(category: string) {
-    this.categoryFilter = category;
-    this.applyFilters();
-  }
-
-  onRiskChange(risk: string) {
-    this.riskFilter = risk;
-    this.applyFilters();
-  }
-
-  onStatusChange(status: string) {
-    this.statusFilter = status;
-    this.applyFilters();
-  }
-  applyFilters() {
+  
+  onFilterChange(filters: { search: string, category: string, risk: string, status: string }) {
     this.filteredSuppliers = this.allSuppliers.filter(supplier => {
-      const matchesSearch = this.searchQuery === '' ||
-        supplier.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        supplier.code.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        supplier.location.toLowerCase().includes(this.searchQuery.toLowerCase());
-      const matchesCategory = this.categoryFilter === 'All Categories' ||
-        supplier.category === this.categoryFilter;
-      const matchesRisk = this.riskFilter === 'All Risk Levels' ||
-        supplier.riskLevel === this.riskFilter.toLowerCase();
-      const matchesStatus = this.statusFilter === 'All Statuses' ||
-        supplier.status === this.statusFilter.toLowerCase().replace(' ', '-');
+      
+      
+      const matchesSearch = filters.search === '' || 
+        supplier.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+        supplier.code.toLowerCase().includes(filters.search.toLowerCase()) ||
+        supplier.location.toLowerCase().includes(filters.search.toLowerCase());
+
+      
+      const matchesCategory = filters.category === '' || supplier.category === filters.category;
+
+      
+      const matchesRisk = filters.risk === '' || supplier.riskLevel === filters.risk;
+
+    
+      const matchesStatus = filters.status === '' || supplier.status === filters.status;
 
       return matchesSearch && matchesCategory && matchesRisk && matchesStatus;
     });

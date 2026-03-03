@@ -24,7 +24,6 @@ export class SupplierDetailPanelComponent {
   readonly DollarSign = DollarSign;
   readonly ClipboardCheck = ClipboardCheck;
 
-
   getRiskBgColor = getRiskBgColor;
   getRiskColor = getRiskColor;
   getStatusColor = getStatusColor;

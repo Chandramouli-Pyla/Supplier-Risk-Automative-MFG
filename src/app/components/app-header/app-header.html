@@ -1,30 +1,88 @@
-<header class="h-20 border-b border-neutral-800 bg-[#0a0a0a] flex items-center justify-between px-8 w-full shrink-0">
-  
+<header
+  class="sticky top-0 z-30 h-20 border-b border-neutral-800 bg-[#0a0a0a] flex items-center justify-between px-8 w-full shrink-0">
+
   <div class="flex flex-col">
     <h1 class="text-xl font-bold tracking-tight text-white leading-none">{{ title }}</h1>
+    @if (subtitle) {
     <p class="text-neutral-500 mt-1 text-xs">{{ subtitle }}</p>
+    }
   </div>
 
   <div class="flex items-center gap-6">
-    
-    <div class="relative w-72">
-      <lucide-icon [img]="Search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500"></lucide-icon>
-      <input 
-        type="text" 
-        placeholder="Search suppliers..." 
-        class="w-full bg-neutral-900/50 border border-neutral-800 rounded-md py-1.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-neutral-600"
-      >
+
+    <div class="relative w-72 hidden md:block">
+      <lucide-icon [img]="Search"
+        class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500"></lucide-icon>
+      <input type="search" placeholder="Search suppliers..."
+        class="w-full bg-neutral-900/50 border border-neutral-800 rounded-md py-1.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-neutral-600">
     </div>
 
-    <button class="relative p-2 text-neutral-400 hover:text-white transition-colors">
-      <lucide-icon [img]="Bell" class="h-5 w-5"></lucide-icon>
-      <span class="absolute top-1.5 right-1.5 w-4 h-4 bg-red-600 text-[10px] font-bold text-white rounded-full flex items-center justify-center border-2 border-[#0a0a0a]">
-        1
-      </span>
-    </button>
+    <div class="relative">
+      <button type="button" (click)="toggleNotif()"
+        class="relative p-2 text-neutral-400 hover:text-white transition-colors rounded-md hover:bg-neutral-900/40 border border-transparent hover:border-neutral-800">
+        <lucide-icon [img]="Bell" class="h-5 w-5"></lucide-icon>
 
-    <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white cursor-pointer hover:bg-blue-500 transition-colors shadow-lg shadow-blue-900/20">
-      <lucide-icon [img]="User" class="h-4 w-4"></lucide-icon>
+        @if (unreadAlerts > 0) {
+        <span
+          class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+          {{ unreadAlerts }}
+        </span>
+        }
+      </button>
+
+      @if (notifOpen) {
+      <div
+        class="absolute right-0 mt-2 w-80 rounded-xl border border-neutral-800 bg-[#0b0b0b] shadow-xl overflow-hidden">
+        <div class="px-4 py-3 text-sm font-semibold text-white">Notifications</div>
+        <div class="h-px bg-neutral-800"></div>
+
+        <div class="max-h-72 overflow-auto">
+          @for (a of alerts.slice(0,3); track a.id) {
+          <button type="button" class="w-full text-left px-4 py-3 hover:bg-neutral-900/60 transition"
+            (click)="goToAlerts()">
+            <div class="text-sm font-medium text-white">{{ a.title }}</div>
+            <div class="text-xs text-neutral-500 mt-1">{{ a.supplierName }}</div>
+          </button>
+          }
+        </div>
+
+        <div class="h-px bg-neutral-800"></div>
+
+        <button type="button"
+          class="w-full py-3 text-sm font-semibold text-blue-400 hover:text-blue-300 hover:bg-neutral-900/60 transition"
+          (click)="goToAlerts()">
+          View all alerts
+        </button>
+      </div>
+      }
+    </div>
+
+    <div class="relative">
+      <button type="button" (click)="toggleUser()"
+        class="p-1 rounded-md hover:bg-neutral-900/40 border border-transparent hover:border-neutral-800">
+        <div
+          class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-900/20">
+          <lucide-icon [img]="User" class="h-4 w-4"></lucide-icon>
+        </div>
+      </button>
+
+      @if (userOpen) {
+      <div
+        class="absolute right-0 mt-2 w-48 rounded-xl border border-neutral-800 bg-[#0b0b0b] shadow-xl overflow-hidden">
+        <div class="px-4 py-3 text-sm font-semibold text-white">My Account</div>
+        <div class="h-px bg-neutral-800"></div>
+
+        <button type="button" class="w-full text-left px-4 py-3 text-sm text-neutral-200 hover:bg-neutral-900/60"
+          (click)="onProfile()">Profile</button>
+        <button type="button" class="w-full text-left px-4 py-3 text-sm text-neutral-200 hover:bg-neutral-900/60"
+          (click)="onSettings()">Settings</button>
+
+        <div class="h-px bg-neutral-800"></div>
+
+        <button type="button" class="w-full text-left px-4 py-3 text-sm text-red-300 hover:bg-neutral-900/60"
+          (click)="onLogout()">Log out</button>
+      </div>
+      }
     </div>
 
   </div>

@@ -1,66 +1,54 @@
-<div class="flex flex-col gap-4 md:flex-row md:items-center justify-between bg-[#111111] border-neutral-800 rounded-xl border p-4 shadow-sm mb-6">
+<div class="bg-[#0a0a0a] border border-neutral-800 rounded-xl p-4 flex flex-col xl:flex-row items-center gap-4 shadow-sm w-full">
   
-  <div class="relative flex-1 max-w-2xl">
+  <div class="relative flex-1 w-full">
     <lucide-icon [img]="Search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500"></lucide-icon>
-    <input
-      type="text"
-      placeholder="Search by name, code, or location..."
-      [ngModel]="searchQuery"
-      (ngModelChange)="onSearchChange($event)"
-      class="w-full rounded-md border border-neutral-800 bg-neutral-900/50 px-10 py-2.5 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-700"
-    />
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onFilterChange()"
+      placeholder="Search by name, code, or location..." 
+      class="w-full bg-black border border-neutral-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-600 transition-colors"
+    >
   </div>
 
-  <div class="flex flex-wrap items-center gap-3">
+  <div class="flex items-center gap-4 w-full xl:w-auto overflow-x-auto">
     
-    <div class="relative">
-      <select
-        [value]="categoryFilter"
-        (change)="onCategoryChange($event)"
-        class="appearance-none rounded-md border border-neutral-800 bg-neutral-900/50 px-4 py-2.5 pr-8 text-sm text-white focus:outline-none focus:ring-1 focus:ring-neutral-700 min-w-[160px] cursor-pointer"
-      >
-        <option value="All Categories">All Categories</option>
+    <div class="relative shrink-0">
+      <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()" class="appearance-none bg-transparent border border-neutral-800 hover:border-neutral-700 rounded-lg text-neutral-400 text-sm pl-4 pr-10 py-2.5 min-w-[180px] focus:outline-none transition-colors cursor-pointer">
+        <option value="">All Categories</option>
         @for (category of categories; track category) {
           <option [value]="category">{{category}}</option>
         }
       </select>
-      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-neutral-500">
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-      </div>
+      <lucide-icon [img]="ChevronDown" class="h-4 w-4 text-neutral-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></lucide-icon>
     </div>
 
-    <div class="relative">
-      <select
-        [value]="riskFilter"
-        (change)="onRiskChange($event)"
-        class="appearance-none rounded-md border border-neutral-800 bg-neutral-900/50 px-4 py-2.5 pr-8 text-sm text-white focus:outline-none focus:ring-1 focus:ring-neutral-700 min-w-[140px] cursor-pointer"
-      >
-        <option value="All Risk Levels">All Risk Levels</option>
+    <div class="relative shrink-0">
+      <select [(ngModel)]="selectedRisk" (ngModelChange)="onFilterChange()" class="appearance-none bg-transparent border border-neutral-800 hover:border-neutral-700 rounded-lg text-neutral-400 text-sm pl-4 pr-10 py-2.5 min-w-[160px] focus:outline-none transition-colors cursor-pointer">
+        <option value="">All Risk Levels</option>
         <option value="low">Low</option>
         <option value="medium">Medium</option>
         <option value="high">High</option>
         <option value="critical">Critical</option>
       </select>
-      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-neutral-500">
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-      </div>
+      <lucide-icon [img]="ChevronDown" class="h-4 w-4 text-neutral-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></lucide-icon>
     </div>
 
-    <div class="relative">
-      <select
-        [value]="statusFilter"
-        (change)="onStatusChange($event)"
-        class="appearance-none rounded-md border border-neutral-800 bg-neutral-900/50 px-4 py-2.5 pr-8 text-sm text-white focus:outline-none focus:ring-1 focus:ring-neutral-700 min-w-[130px] cursor-pointer"
-      >
-        <option value="All Statuses">All Statuses</option>
+    <div class="relative shrink-0">
+      <select [(ngModel)]="selectedStatus" (ngModelChange)="onFilterChange()" class="appearance-none bg-transparent border border-neutral-800 hover:border-neutral-700 rounded-lg text-neutral-400 text-sm pl-4 pr-10 py-2.5 min-w-[160px] focus:outline-none transition-colors cursor-pointer">
+        <option value="">All Statuses</option>
         <option value="active">Active</option>
         <option value="under-review">Under Review</option>
         <option value="suspended">Suspended</option>
       </select>
-      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-neutral-500">
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-      </div>
+      <lucide-icon [img]="ChevronDown" class="h-4 w-4 text-neutral-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></lucide-icon>
     </div>
 
+    @if (hasActiveFilters) {
+      <button (click)="clearFilters()" class="flex items-center gap-1.5 px-2 py-2.5 text-sm text-neutral-400 hover:text-white transition-colors whitespace-nowrap shrink-0">
+        <lucide-icon [img]="X" class="h-4 w-4"></lucide-icon>
+        Clear
+      </button>
+    }
   </div>
 </div>

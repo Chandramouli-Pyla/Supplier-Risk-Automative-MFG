@@ -1,34 +1,25 @@
-<div class="text-white w-full">
-  <app-supplier-filters
-    [searchQuery]="searchQuery"
-    [categoryFilter]="categoryFilter"
-    [riskFilter]="riskFilter"
-    [statusFilter]="statusFilter"
-    (searchQueryChange)="onSearchChange($event)"
-    (categoryFilterChange)="onCategoryChange($event)"
-    (riskFilterChange)="onRiskChange($event)"
-    (statusFilterChange)="onStatusChange($event)"
-  ></app-supplier-filters>
+<div class="p-8 w-full max-w-[1600px] mx-auto flex flex-col gap-6">
+  
+  <app-supplier-filters 
+    (filterChange)="onFilterChange($event)">
+  </app-supplier-filters>
 
-  <div class="flex gap-6 items-start mt-6">
-    
-    <div class="transition-all duration-300 ease-in-out min-w-0" 
-         [ngClass]="selectedSupplier ? 'flex-[0_0_65%]' : 'flex-1 w-full'">
-      <app-suppliers-table
-        [suppliers]="filteredSuppliers"
-        [selectedSupplierId]="selectedSupplierId"
-        (selectSupplier)="onSelectSupplier($event)"
-      ></app-suppliers-table>
+  <div class="flex items-start gap-6">
+    <div class="flex-1 min-w-0">
+      <app-suppliers-table 
+        [suppliers]="filteredSuppliers" 
+        [selectedSupplierId]="selectedSupplier?.id"
+        (selectSupplier)="onSelectSupplier($event)">
+      </app-suppliers-table>
     </div>
 
     @if (selectedSupplier) {
-      <div class="flex-1 min-w-0 h-[calc(100vh-220px)] sticky top-0 shrink-0">
-        <app-supplier-detail-panel
-          [supplier]="selectedSupplier"
-          (closePanel)="closePanel()"
-        ></app-supplier-detail-panel>
-      </div>
+      <app-supplier-detail-panel 
+        [supplier]="selectedSupplier" 
+        (closePanel)="onClosePanel()"
+        class="w-[400px] shrink-0 sticky top-8">
+      </app-supplier-detail-panel>
     }
-    
   </div>
+
 </div>

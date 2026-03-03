@@ -1,78 +1,81 @@
-<div class="bg-[#111111] border-neutral-800 rounded-xl border text-white shadow-sm">
-  <div class="flex flex-col space-y-1.5 p-6 pb-2">
-    <h3 class="text-base font-medium">Supplier Directory ({{suppliers.length}})</h3>
-  </div>
+<div class="border border-neutral-800 rounded-xl bg-[#0a0a0a] overflow-hidden shadow-sm flex flex-col">
   
-  <div class="p-6 pt-0">
-    <div class="rounded-lg border border-neutral-800 overflow-hidden">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="border-b border-neutral-800 bg-neutral-900/50 text-neutral-400">
-            <th class="h-10 px-4 text-left align-middle font-medium">Supplier</th>
-            <th class="h-10 px-4 text-left align-middle font-medium">Category</th>
-            <th class="h-10 px-4 text-left align-middle font-medium">Tier</th>
-            <th class="h-10 px-4 text-left align-middle font-medium">Risk Score</th>
-            <th class="h-10 px-4 text-left align-middle font-medium">Status</th>
-            <th class="h-10 px-4 text-left align-middle font-medium">Alerts</th>
-            <th class="h-10 px-4 w-10"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (supplier of suppliers; track supplier.id) {
-            <tr
-              class="border-b border-neutral-800 transition-colors hover:bg-neutral-800/50 cursor-pointer"
-              [class.bg-neutral-800]="selectedSupplierId === supplier.id"
-              (click)="onRowClick(supplier)"
-            >
-              <td class="p-4 align-middle">
-                <div class="font-medium text-white">{{supplier.name}}</div>
-                <div class="text-xs text-neutral-500">{{supplier.code}} • {{supplier.location}}</div>
-              </td>
-              
-              <td class="p-4 align-middle text-neutral-300">{{supplier.category}}</td>
-              
-              <td class="p-4 align-middle">
-                <span class="inline-flex items-center rounded-full border border-neutral-700 bg-neutral-800 px-2.5 py-0.5 text-xs font-semibold text-neutral-300">
-                  Tier {{supplier.tier}}
-                </span>
-              </td>
-              
-              <td class="p-4 align-middle">
-                <span
-                  class="inline-flex items-center rounded-sm px-2 py-1 text-xs font-medium"
-                  [ngClass]="getRiskBgColor(supplier.riskLevel)"
-                >
-                  {{supplier.riskScore}}
-                </span>
-              </td>
-              
-              <td class="p-4 align-middle">
-                <span
-                  class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize"
-                  [ngClass]="getStatusColor(supplier.status)"
-                >
-                  {{supplier.status}}
-                </span>
-              </td>
-              
-              <td class="p-4 align-middle">
-                @if (supplier.activeAlerts > 0) {
-                  <div class="flex items-center text-amber-500 font-medium">
-                    <lucide-icon [img]="AlertTriangle" class="mr-1 h-4 w-4"></lucide-icon>
-                    {{supplier.activeAlerts}}
-                  </div>
-                } @else {
-                  <span class="text-neutral-500">—</span>
-                }
-              </td>
-              
-              <td class="p-4 align-middle">
-                <lucide-icon [img]="ChevronRight" class="h-4 w-4 text-neutral-500"></lucide-icon>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+  <div class="px-6 py-5 bg-[#0a0a0a]">
+    <h2 class="text-[15px] font-bold text-white tracking-tight">Supplier Directory ({{suppliers.length}})</h2>
   </div>
+
+  <table class="w-full text-sm text-left border-collapse table-fixed">
+    
+    <thead class="text-xs text-neutral-500 uppercase bg-neutral-900/50 border-y border-neutral-800">
+      <tr>
+        <th class="px-6 py-4 font-medium w-auto">Supplier</th>
+        <th class="px-6 py-4 font-medium w-48">Category</th>
+        <th class="px-6 py-4 font-medium w-32">Tier</th>
+        <th class="px-6 py-4 font-medium text-center w-32">Risk Score</th>
+        <th class="px-6 py-4 font-medium w-44">Status</th>
+        <th class="px-6 py-4 font-medium text-right w-24">Alerts</th>
+        <th class="px-6 py-4 w-12"></th>
+      </tr>
+    </thead>
+
+    <tbody class="divide-y divide-neutral-800/50">
+      @for (supplier of suppliers; track supplier.id) {
+        <tr 
+          (click)="selectSupplier.emit(supplier)"
+          class="group cursor-pointer transition-colors duration-150"
+          [ngClass]="selectedSupplierId === supplier.id ? 'bg-blue-600/5' : 'hover:bg-neutral-800/30'"
+        >
+          <td class="px-6 py-4 truncate">
+            <div class="font-medium text-white group-hover:text-blue-400 transition-colors truncate">{{supplier.name}}</div>
+            <div class="text-[10px] text-neutral-500 mt-0.5 truncate uppercase tracking-wider">{{supplier.code}} • {{supplier.location}}</div>
+          </td>
+
+          <td class="px-6 py-4 text-neutral-400 truncate">
+            {{supplier.category}}
+          </td>
+
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-medium border border-neutral-800 bg-neutral-900 text-neutral-400 whitespace-nowrap">
+              Tier {{supplier.tier}}
+            </span>
+          </td>
+
+          <td class="px-6 py-4 text-center">
+            <div class="inline-flex items-center justify-center w-8 h-8 rounded-md font-bold text-xs whitespace-nowrap mx-auto" 
+                 [ngClass]="getRiskColor(supplier.riskLevel)">
+              {{supplier.riskScore}}
+            </div>
+          </td>
+
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold lowercase tracking-tight whitespace-nowrap" 
+                  [ngClass]="getStatusColor(supplier.status)">
+              {{supplier.status}}
+            </span>
+          </td>
+
+          <td class="px-6 py-4 text-right">
+            @if (supplier.activeAlerts > 0) {
+              <div class="flex items-center justify-end gap-1.5 text-amber-500 font-medium whitespace-nowrap">
+                <lucide-icon [img]="AlertTriangle" class="h-3.5 w-3.5"></lucide-icon>
+                {{supplier.activeAlerts}}
+              </div>
+            } @else {
+              <span class="text-neutral-600">—</span>
+            }
+          </td>
+
+          <td class="px-6 py-4 text-neutral-600 group-hover:text-white transition-colors">
+            <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (suppliers.length === 0) {
+    <div class="p-12 text-center border-t border-neutral-800">
+      <div class="text-neutral-500 text-sm">No suppliers found matching your criteria.</div>
+    </div>
+  }
 </div>
