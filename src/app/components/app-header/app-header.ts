@@ -15,17 +15,14 @@ export class AppHeaderComponent implements OnInit {
   readonly Bell = Bell;
   readonly User = User;
 
- 
   pageTitle = 'Suppliers';
   pageSubtitle = 'Manage and monitor supplier performance';
 
   constructor(private router: Router) {}
 
   ngOnInit() {
-    
     this.updateHeaderTexts(this.router.url);
 
-    
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
@@ -33,11 +30,13 @@ export class AppHeaderComponent implements OnInit {
     });
   }
 
-  
   private updateHeaderTexts(url: string) {
     if (url.includes('/alerts')) {
       this.pageTitle = 'Alerts & Notifications';
       this.pageSubtitle = 'Monitor and manage supplier risk alerts';
+    } else if (url.includes('/reports')) {
+      this.pageTitle = 'Reports & Analytics';
+      this.pageSubtitle = 'Generate and export supplier performance reports';
     } else {
       this.pageTitle = 'Suppliers';
       this.pageSubtitle = 'Manage and monitor supplier performance';
