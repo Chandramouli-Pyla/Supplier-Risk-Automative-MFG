@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
@@ -10,7 +10,8 @@ import {
   TrendingUp,
   AlertTriangle,
   FileText,
-  Settings
+  Settings,
+  X
 } from 'lucide-angular';
 
 @Component({
@@ -20,8 +21,12 @@ import {
   templateUrl: './app-sidebar.html',
 })
 export class AppSidebarComponent {
+  @Input() isOpen = false;
+  @Output() closeSidebar = new EventEmitter<void>();
+
   readonly Shield = Shield;
   readonly Settings = Settings;
+  readonly X = X;
   navItems = [
 	{ name: 'Dashboard', icon: LayoutGrid, path: '/dashboard' },
 	{ name: 'Suppliers', icon: Users, path: '/suppliers' },
@@ -30,4 +35,8 @@ export class AppSidebarComponent {
 	{ name: 'Alerts', icon: AlertTriangle, path: '/alerts' },
 	{ name: 'Reports', icon: FileText, path: '/reports' },
   ];
+
+  onClose(): void {
+    this.closeSidebar.emit();
+  }
 }

@@ -4,6 +4,7 @@
     <h2 class="text-[15px] font-bold text-white tracking-tight">Supplier Directory ({{suppliers.length}})</h2>
   </div>
 
+  <div class="overflow-x-auto">
   <table class="w-full text-sm text-left border-collapse table-fixed">
     
     <thead class="text-xs text-neutral-500 uppercase bg-neutral-900/50 border-y border-neutral-800">
@@ -72,6 +73,7 @@
       }
     </tbody>
   </table>
+  </div>
 
   @if (suppliers.length === 0) {
     <div class="p-12 text-center border-t border-neutral-800">

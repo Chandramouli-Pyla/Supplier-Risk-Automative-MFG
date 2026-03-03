@@ -1,8 +1,8 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
-import { LucideAngularModule, Search, Bell, User } from 'lucide-angular';
+import { LucideAngularModule, Search, Bell, User, Menu } from 'lucide-angular';
 
 import { alerts } from '../../lib/data';
 
@@ -13,9 +13,12 @@ import { alerts } from '../../lib/data';
   templateUrl: './app-header.html',
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
+  @Output() toggleSidebar = new EventEmitter<void>();
+
   readonly Search = Search;
   readonly Bell = Bell;
   readonly User = User;
+  readonly Menu = Menu;
 
   title = 'SupplyRisk';
   subtitle = '';
@@ -57,6 +60,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+  }
+
+  onToggleSidebar(): void {
+    this.toggleSidebar.emit();
   }
 
   toggleNotif(): void {

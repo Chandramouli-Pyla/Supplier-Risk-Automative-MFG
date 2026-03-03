@@ -1,11 +1,17 @@
 <header
-  class="sticky top-0 z-30 h-20 border-b border-neutral-800 bg-[#0a0a0a] flex items-center justify-between px-8 w-full shrink-0">
+  class="sticky top-0 z-30 h-20 border-b border-neutral-800 bg-[#0a0a0a] flex items-center justify-between px-4 md:px-8 w-full shrink-0">
 
-  <div class="flex flex-col">
-    <h1 class="text-xl font-bold tracking-tight text-white leading-none">{{ title }}</h1>
-    @if (subtitle) {
-    <p class="text-neutral-500 mt-1 text-xs">{{ subtitle }}</p>
-    }
+  <div class="flex items-center gap-4">
+    <button type="button" (click)="onToggleSidebar()" class="md:hidden text-neutral-400 hover:text-white">
+      <lucide-icon [img]="Menu" class="h-6 w-6"></lucide-icon>
+    </button>
+
+    <div class="flex flex-col">
+      <h1 class="text-xl font-bold tracking-tight text-white leading-none">{{ title }}</h1>
+      @if (subtitle) {
+      <p class="text-neutral-500 mt-1 text-xs">{{ subtitle }}</p>
+      }
+    </div>
   </div>
 
   <div class="flex items-center gap-6">
