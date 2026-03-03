@@ -5,12 +5,7 @@
 
 <div class="h-[520px]">
   <div class="h-[345px]">
-    <canvas
-      baseChart
-      [type]="radarType"
-      [data]="radarData"
-      [options]="radarOptions"
-    ></canvas>
+    <div echarts [options]="chartOption" class="w-full h-full"></div>
   </div>
 </div>
 

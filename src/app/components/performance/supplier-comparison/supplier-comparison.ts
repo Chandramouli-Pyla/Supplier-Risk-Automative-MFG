@@ -1,76 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartType } from 'chart.js';
+import { NgxEchartsDirective } from 'ngx-echarts';
+import { EChartsOption } from 'echarts';
 
 import { suppliers } from '../../../lib/data';
 
 @Component({
   selector: 'app-supplier-comparison',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective],
-  templateUrl: './supplier-comparison.html',
+  imports: [CommonModule, NgxEchartsDirective],
+  template: `
+    <div class="w-full h-full min-h-[300px]">
+      <div echarts [options]="chartOption" class="w-full h-full"></div>
+    </div>
+  `,
 })
 export class SupplierComparisonComponent implements OnInit {
-  radarType: ChartType = 'radar';
-
-  radarData: ChartConfiguration['data'] = { labels: [], datasets: [] };
-
-  radarOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: {
-          color: '#9ca3af',
-          font: { size: 11 },
-          boxWidth: 10,
-          boxHeight: 10,
-        },
-      },
-      tooltip: {
-        backgroundColor: '#0b0f14',
-        borderColor: '#27272a',
-        borderWidth: 1,
-        titleColor: '#e5e7eb',
-        bodyColor: '#e5e7eb',
-        cornerRadius: 10,
-        padding: 12,
-      } as any,
-    },
-    scales: {
-  r: {
-    min: 0,
-    max: 100,
-
-    ticks: {
-      stepSize: 25,
-      color: '#9ca3af',
-      font: { size: 10 },
-      align: 'start',
-      crossAlign: 'far',
-
-      backdropColor: 'transparent' as any,
-      showLabelBackdrop: false as any,
-    },
-
-    grid: {
-      color: 'rgba(255,255,255,0.08)',
-    } as any,
-
-    angleLines: {
-      color: 'rgba(255,255,255,0.08)',
-    } as any,
-
-    pointLabels: {
-      color: '#9ca3af',
-      font: { size: 12 },
-      padding: 6,
-    } as any,
-  },
-},
-  };
+  chartOption: EChartsOption = {};
 
   ngOnInit(): void {
     const topSuppliers = [...suppliers]
@@ -83,28 +29,31 @@ export class SupplierComparisonComponent implements OnInit {
       })
       .slice(0, 3);
 
-    const labels = ['Quality', 'Delivery', 'Cost', 'Compliance'];
-
     const colors = ['#3b82f6', '#10b981', '#f59e0b'];
 
-    this.radarData = {
-      labels,
-      datasets: topSuppliers.map((s: any, index: number) => ({
-        label: s.name, 
-        data: [s.qualityScore, s.deliveryScore, s.costScore, s.complianceScore],
-        borderColor: colors[index],
-        backgroundColor: this.withAlpha(colors[index], 0.20), 
-        borderWidth: 2,
-        pointRadius: 2,
-        pointHoverRadius: 3,
-      })),
+    this.chartOption = {
+      tooltip: { trigger: 'item', backgroundColor: '#0b0f14', borderColor: '#27272a', textStyle: { color: '#e5e7eb' } },
+      legend: { bottom: 0, textStyle: { color: '#9ca3af' } },
+      radar: {
+        indicator: [
+          { name: 'Quality', max: 100 },
+          { name: 'Delivery', max: 100 },
+          { name: 'Cost', max: 100 },
+          { name: 'Compliance', max: 100 }
+        ],
+        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+        splitArea: { show: false },
+        axisName: { color: '#9ca3af' }
+      },
+      series: [{
+        type: 'radar',
+        data: topSuppliers.map((s: any, index: number) => ({
+          value: [s.qualityScore, s.deliveryScore, s.costScore, s.complianceScore],
+          name: s.name,
+          itemStyle: { color: colors[index] },
+          areaStyle: { color: colors[index], opacity: 0.2 }
+        }))
+      }]
     };
-  }
-
-  private withAlpha(hex: string, alpha: number): string {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r},${g},${b},${alpha})`;
   }
 }

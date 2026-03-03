@@ -7,12 +7,7 @@
     </div>
 
     <div class="h-[300px]">
-      <canvas
-        baseChart
-        [type]="trendType"
-        [data]="trendData"
-        [options]="trendOptions"
-      ></canvas>
+      <div echarts [options]="trendOption" class="w-full h-full"></div>
     </div>
   </div>
 
@@ -25,12 +20,7 @@
     </div>
 
     <div class="h-[300px]">
-      <canvas
-        baseChart
-        [type]="riskType"
-        [data]="riskData"
-        [options]="riskOptions"
-      ></canvas>
+      <div echarts [options]="riskOption" class="w-full h-full"></div>
     </div>
   </div>
 

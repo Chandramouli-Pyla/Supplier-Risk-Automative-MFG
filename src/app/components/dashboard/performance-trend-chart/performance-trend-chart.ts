@@ -1,77 +1,93 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartType } from 'chart.js';
+import { NgxEchartsDirective } from 'ngx-echarts';
+import { EChartsOption, graphic } from 'echarts';
 
 import { performanceHistory } from '../../../lib/data';
 
 @Component({
   selector: 'app-performance-trend-chart',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective],
-  templateUrl: './performance-trend-chart.html',
+  imports: [CommonModule, NgxEchartsDirective],
+  template: `
+    <div class="w-full h-full min-h-[300px]">
+      <div echarts [options]="chartOption" class="w-full h-full"></div>
+    </div>
+  `,
 })
 export class PerformanceTrendChartComponent {
-  type: ChartType = 'line';
+  chartOption: EChartsOption = {};
 
-  data: ChartConfiguration['data'] = {
-    labels: performanceHistory.map((p: any) => p.month),
-    datasets: [
-      {
-        label: 'Quality',
-        data: performanceHistory.map((p: any) => p.qualityScore),
-        borderColor: '#3b82f6',
-        backgroundColor: 'rgba(59,130,246,0.15)',
-        tension: 0.4,
-        pointRadius: 4,
-      },
-      {
-        label: 'Delivery',
-        data: performanceHistory.map((p: any) => p.deliveryScore),
-        borderColor: '#10b981',
-        backgroundColor: 'rgba(16,185,129,0.15)',
-        tension: 0.4,
-        pointRadius: 4,
-      },
-      {
-        label: 'Overall',
-        data: performanceHistory.map((p: any) => p.overallScore),
-        borderColor: '#f59e0b',
-        backgroundColor: 'rgba(245,158,11,0.15)',
-        tension: 0.4,
-        pointRadius: 4,
-      },
-    ] as any,
-  };
+  constructor() {
+    const ph = performanceHistory;
+    const axisLabel = { color: '#9ca3af', fontSize: 12 };
+    const splitLine = { lineStyle: { color: 'rgba(255,255,255,0.08)', type: 'dashed' as const } };
 
-  options: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: { color: '#9ca3af', boxWidth: 10, boxHeight: 10 },
-      },
+    this.chartOption = {
       tooltip: {
+        trigger: 'axis',
         backgroundColor: '#0b0f14',
         borderColor: '#27272a',
-        borderWidth: 1,
-        titleColor: '#e5e7eb',
-        bodyColor: '#e5e7eb',
-        cornerRadius: 10,
-      } as any,
-    },
-    scales: {
-      x: {
-        ticks: { color: '#9ca3af', font: { size: 12 } },
-        grid: { color: 'rgba(255,255,255,0.08)', borderDash: [3, 3] } as any,
+        textStyle: { color: '#e5e7eb' },
+        padding: 12,
       },
-      y: {
+      legend: {
+        bottom: 0,
+        textStyle: { color: '#9ca3af' },
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '10%',
+        top: '5%',
+        containLabel: true,
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ph.map((p) => p.month),
+        axisLabel,
+        axisLine: { lineStyle: { color: '#374151' } },
+      },
+      yAxis: {
+        type: 'value',
         min: 70,
         max: 100,
-        ticks: { color: '#9ca3af', font: { size: 12 } },
-        grid: { color: 'rgba(255,255,255,0.08)', borderDash: [3, 3] } as any,
+        axisLabel,
+        splitLine,
       },
-    },
-  };
+      series: [
+        {
+          name: 'Quality',
+          type: 'line',
+          smooth: true,
+          data: ph.map((p) => p.qualityScore),
+          itemStyle: { color: '#3b82f6' },
+          areaStyle: {
+            color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(59,130,246,0.15)' }, { offset: 1, color: 'rgba(59,130,246,0)' }])
+          }
+        },
+        {
+          name: 'Delivery',
+          type: 'line',
+          smooth: true,
+          data: ph.map((p) => p.deliveryScore),
+          itemStyle: { color: '#10b981' },
+          areaStyle: {
+            color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(16,185,129,0.15)' }, { offset: 1, color: 'rgba(16,185,129,0)' }])
+          }
+        },
+        {
+          name: 'Overall',
+          type: 'line',
+          smooth: true,
+          data: ph.map((p) => p.overallScore),
+          itemStyle: { color: '#f59e0b' },
+          areaStyle: {
+            color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(245,158,11,0.15)' }, { offset: 1, color: 'rgba(245,158,11,0)' }])
+          }
+        },
+      ],
+    };
+  }
 }
