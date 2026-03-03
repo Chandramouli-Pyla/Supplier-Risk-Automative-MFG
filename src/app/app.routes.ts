@@ -6,7 +6,7 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         loadComponent: () => import('./dashboard/dashboard').then(m => m.DashboardComponent),
-        data: { title: 'Dashboard', subtitle: 'Default landing page' },
+        data: { title: 'Dashboard', subtitle: 'Supplier Performance Risk Overview' },
     },
     {
         path: 'suppliers',
