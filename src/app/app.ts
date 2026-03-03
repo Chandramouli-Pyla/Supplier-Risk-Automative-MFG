@@ -9,4 +9,14 @@ import { AppHeaderComponent } from './components/app-header/app-header';
   imports: [RouterOutlet, AppSidebarComponent, AppHeaderComponent],
   templateUrl: './app.html',
 })
-export class AppComponent {}
+export class AppComponent {
+  isSidebarOpen = false;
+
+  onSidebarToggle(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  onSidebarClose(): void {
+    this.isSidebarOpen = false;
+  }
+}

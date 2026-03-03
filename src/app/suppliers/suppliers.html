@@ -1,11 +1,11 @@
-<div class="p-8 w-full max-w-[1600px] mx-auto flex flex-col gap-6">
+<div class="p-4 md:p-8 w-full max-w-[1600px] mx-auto flex flex-col gap-6">
   
   <app-supplier-filters 
     (filterChange)="onFilterChange($event)">
   </app-supplier-filters>
 
-  <div class="flex items-start gap-6">
-    <div class="flex-1 min-w-0">
+  <div class="flex flex-col lg:flex-row items-start gap-6 relative">
+    <div class="flex-1 min-w-0 w-full">
       <app-suppliers-table 
         [suppliers]="filteredSuppliers" 
         [selectedSupplierId]="selectedSupplier?.id"
@@ -17,7 +17,7 @@
       <app-supplier-detail-panel 
         [supplier]="selectedSupplier" 
         (closePanel)="onClosePanel()"
-        class="w-[400px] shrink-0 sticky top-8">
+        class="fixed inset-0 z-50 w-full h-full lg:static lg:w-[400px] lg:h-auto lg:shrink-0 lg:sticky lg:top-8 bg-black lg:bg-transparent">
       </app-supplier-detail-panel>
     }
   </div>

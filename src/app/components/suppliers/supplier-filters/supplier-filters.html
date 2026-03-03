@@ -1,4 +1,4 @@
-<div class="bg-[#0a0a0a] border border-neutral-800 rounded-xl p-4 flex flex-col xl:flex-row items-center gap-4 shadow-sm w-full">
+<div class="bg-[#0a0a0a] border border-neutral-800 rounded-xl p-4 flex flex-col lg:flex-row items-center gap-4 shadow-sm w-full">
   
   <div class="relative flex-1 w-full">
     <lucide-icon [img]="Search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500"></lucide-icon>
@@ -11,7 +11,7 @@
     >
   </div>
 
-  <div class="flex items-center gap-4 w-full xl:w-auto overflow-x-auto">
+  <div class="flex items-center gap-3 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0 no-scrollbar">
     
     <div class="relative shrink-0">
       <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()" class="appearance-none bg-transparent border border-neutral-800 hover:border-neutral-700 rounded-lg text-neutral-400 text-sm pl-4 pr-10 py-2.5 min-w-[180px] focus:outline-none transition-colors cursor-pointer">
