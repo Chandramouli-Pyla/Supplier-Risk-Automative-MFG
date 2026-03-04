@@ -21,6 +21,7 @@ This POC demonstrates a rich set of features essential for effective supply chai
 This project is built with a modern, maintainable, and performant technology stack:
 
 *   **Framework:** Angular (v19+)
+*   **Runtime:** Node.js (v18.19.1+, v20.11.1+, or v22+)
 *   **Architecture:** Standalone Components for a modular and tree-shakable structure, eliminating the need for NgModules.
 *   **Styling:** Tailwind CSS for a utility-first, responsive design system that enables rapid UI development.
 *   **Data Visualization:** Apache ECharts (via `ngx-echarts`) for powerful, interactive, and high-performance charting.
@@ -40,8 +41,8 @@ To run this project locally, follow these steps:
 ### Prerequisites
 
 Make sure you have the following installed on your system:
-*   Node.js (v18 or later)
-*   npm (Node Package Manager)
+*   **Node.js**: v18.19.1 or later (v20 LTS recommended)
+*   **npm**: v10 or later
 
 ### Installation & Setup
 
