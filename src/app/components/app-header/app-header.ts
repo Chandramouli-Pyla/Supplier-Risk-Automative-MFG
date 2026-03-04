@@ -100,6 +100,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   }
 
   onLogout(): void {
-    this.closeAll();
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 }

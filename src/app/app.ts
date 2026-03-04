@@ -6,7 +6,7 @@ import { AppHeaderComponent } from './components/app-header/app-header';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AppSidebarComponent, AppHeaderComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
 })
 export class AppComponent {
