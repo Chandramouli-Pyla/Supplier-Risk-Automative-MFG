@@ -61,4 +61,3 @@ Make sure you have the following installed on your system:
     ```
 
 The application will compile and be available at `http://localhost:4200/`. The server will automatically reload if you make any changes to the source files.
-EOF
