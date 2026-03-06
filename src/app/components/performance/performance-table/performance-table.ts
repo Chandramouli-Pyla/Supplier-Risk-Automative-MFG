@@ -1,8 +1,8 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, TrendingUp, TrendingDown, Minus } from 'lucide-angular';
 
-import { suppliers } from '../../../lib/data';
+import { SupplierService, Supplier } from '../../../services/supplier.service';
 
 @Component({
   selector: 'app-performance-table',
@@ -10,21 +10,37 @@ import { suppliers } from '../../../lib/data';
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './performance-table.html',
 })
-export class PerformanceTableComponent implements OnChanges {
+export class PerformanceTableComponent implements OnInit, OnChanges {
+  private supplierService = inject(SupplierService);
+  private cdr = inject(ChangeDetectorRef);
+
   @Input() searchText = '';
 
   readonly TrendingUp = TrendingUp;
   readonly TrendingDown = TrendingDown;
   readonly Minus = Minus;
 
-  rows: any[] = [];
+  suppliers: Supplier[] = [];
+  rows: Supplier[] = [];
+
+  ngOnInit() {
+    this.supplierService.getSuppliers().subscribe((data) => {
+      this.suppliers = data;
+      this.updateRows();
+      this.cdr.detectChanges();
+    });
+  }
 
   ngOnChanges(): void {
+    this.updateRows();
+  }
+
+  private updateRows() {
     const q = (this.searchText ?? '').trim().toLowerCase();
 
     const filtered = !q
-      ? suppliers
-      : suppliers.filter((s: any) => {
+      ? this.suppliers
+      : this.suppliers.filter((s) => {
           return (
             (s.name ?? '').toLowerCase().includes(q) ||
             (s.category ?? '').toLowerCase().includes(q) ||
@@ -33,17 +49,17 @@ export class PerformanceTableComponent implements OnChanges {
         });
 
     this.rows = [...filtered]
-      .sort((a: any, b: any) => this.avg(b) - this.avg(a))
+      .sort((a, b) => this.avg(b) - this.avg(a))
       .slice(0, 8);
   }
 
-  avg(s: any): number {
+  avg(s: Supplier): number {
     return (
       (s.qualityScore + s.deliveryScore + s.costScore + s.complianceScore) / 4
     );
   }
 
-  overallRounded(s: any): number {
+  overallRounded(s: Supplier): number {
     return Math.round(this.avg(s));
   }
 

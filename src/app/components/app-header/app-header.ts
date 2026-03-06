@@ -1,10 +1,9 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { LucideAngularModule, Search, Bell, User, Menu } from 'lucide-angular';
-
-import { alerts } from '../../lib/data';
+import { Alert, AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-header',
@@ -14,6 +13,8 @@ import { alerts } from '../../lib/data';
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidebar = new EventEmitter<void>();
+
+  private alertService = inject(AlertService);
 
   readonly Search = Search;
   readonly Bell = Bell;
@@ -26,8 +27,8 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   notifOpen = false;
   userOpen = false;
 
-  alerts = alerts as any[];
-  unreadAlerts = (alerts as any[]).filter((a) => a.status === 'new').length;
+  alerts: Alert[] = [];
+  unreadAlerts = 0;
 
   private sub?: Subscription;
 
@@ -55,6 +56,13 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
         setFromRoute();
         this.notifOpen = false;
         this.userOpen = false;
+      });
+
+    this.alertService.getAlerts().subscribe(allAlerts => {
+      // Get latest 5 alerts for the dropdown
+      this.alerts = allAlerts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
+      // Get count of all 'new' alerts
+      this.unreadAlerts = allAlerts.filter(a => a.status === 'new').length;
       });
   }
 

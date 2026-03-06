@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, X, MapPin, Mail, User, Award, Calendar, ShieldCheck, Truck, DollarSign, ClipboardCheck } from 'lucide-angular';
-import { Supplier, getRiskBgColor, getStatusColor, getRiskColor } from '../../../lib/data';
+import { getRiskBgColor, getStatusColor, getRiskColor } from '../../../lib/data';
+import { Supplier } from '../../../services/supplier.service';
 
 @Component({
   selector: 'app-supplier-detail-panel',

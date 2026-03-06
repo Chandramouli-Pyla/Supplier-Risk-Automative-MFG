@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { EChartsOption, graphic } from 'echarts';
 
-import { performanceHistory } from '../../../lib/data';
+import { PerformanceService, PerformanceMetric } from '../../../services/performance.service';
 
 @Component({
   selector: 'app-performance-trend-chart',
@@ -15,11 +15,19 @@ import { performanceHistory } from '../../../lib/data';
     </div>
   `,
 })
-export class PerformanceTrendChartComponent {
+export class PerformanceTrendChartComponent implements OnInit {
+  private performanceService = inject(PerformanceService);
+  private cdr = inject(ChangeDetectorRef);
   chartOption: EChartsOption = {};
 
-  constructor() {
-    const ph = performanceHistory;
+  ngOnInit() {
+    this.performanceService.getPerformanceHistory().subscribe((data) => {
+      this.updateChart(data);
+      this.cdr.detectChanges();
+    });
+  }
+
+  private updateChart(ph: PerformanceMetric[]) {
     const axisLabel = { color: '#9ca3af', fontSize: 12 };
     const splitLine = { lineStyle: { color: 'rgba(255,255,255,0.08)', type: 'dashed' as const } };
 

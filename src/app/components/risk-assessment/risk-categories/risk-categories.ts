@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -10,7 +10,7 @@ import {
   Briefcase,
 } from 'lucide-angular';
 
-import { suppliers } from '../../../lib/data';
+import { SupplierService, Supplier } from '../../../services/supplier.service';
 
 type RiskLevel = { label: 'Low' | 'Medium' | 'High'; cls: string };
 
@@ -21,6 +21,9 @@ type RiskLevel = { label: 'Low' | 'Medium' | 'High'; cls: string };
   templateUrl: './risk-categories.html',
 })
 export class RiskCategoriesComponent implements OnInit {
+  private supplierService = inject(SupplierService);
+  private cdr = inject(ChangeDetectorRef);
+
   readonly Shield = Shield;
   readonly Truck = Truck;
   readonly DollarSign = DollarSign;
@@ -38,62 +41,65 @@ export class RiskCategoriesComponent implements OnInit {
   }> = [];
 
   ngOnInit(): void {
-    const calcCategoryRisk = (getter: (s: any) => number): number => {
-      const avg =
-        suppliers.reduce((acc: number, s: any) => acc + getter(s), 0) /
-        Math.max(suppliers.length, 1);
-      return Math.round(100 - avg);
-    };
+    this.supplierService.getSuppliers().subscribe((suppliers) => {
+      const calcCategoryRisk = (getter: (s: Supplier) => number): number => {
+        const avg =
+          suppliers.reduce((acc: number, s: Supplier) => acc + getter(s), 0) /
+          Math.max(suppliers.length, 1);
+        return Math.round(100 - avg);
+      };
 
-    const raw = [
-      {
-        name: 'Quality Risk',
-        description: 'Product defects, specifications compliance',
-        icon: this.Shield,
-        risk: calcCategoryRisk((s) => s.qualityScore),
-        color: '#3b82f6',
-      },
-      {
-        name: 'Delivery Risk',
-        description: 'On-time delivery, lead time consistency',
-        icon: this.Truck,
-        risk: calcCategoryRisk((s) => s.deliveryScore),
-        color: '#10b981',
-      },
-      {
-        name: 'Cost Risk',
-        description: 'Pricing stability, cost competitiveness',
-        icon: this.DollarSign,
-        risk: calcCategoryRisk((s) => s.costScore),
-        color: '#f59e0b',
-      },
-      {
-        name: 'Compliance Risk',
-        description: 'Regulatory, certifications, audits',
-        icon: this.ClipboardCheck,
-        risk: calcCategoryRisk((s) => s.complianceScore),
-        color: '#a855f7',
-      },
-      {
-        name: 'Capacity Risk',
-        description: 'Production capacity, scalability',
-        icon: this.Factory,
-        risk: 28,
-        color: '#ef4444',
-      },
-      {
-        name: 'Financial Risk',
-        description: 'Financial stability, credit rating',
-        icon: this.Briefcase,
-        risk: 22,
-        color: '#3b82f6',
-      },
-    ];
+      const raw = [
+        {
+          name: 'Quality Risk',
+          description: 'Product defects, specifications compliance',
+          icon: this.Shield,
+          risk: calcCategoryRisk((s) => s.qualityScore),
+          color: '#3b82f6',
+        },
+        {
+          name: 'Delivery Risk',
+          description: 'On-time delivery, lead time consistency',
+          icon: this.Truck,
+          risk: calcCategoryRisk((s) => s.deliveryScore),
+          color: '#10b981',
+        },
+        {
+          name: 'Cost Risk',
+          description: 'Pricing stability, cost competitiveness',
+          icon: this.DollarSign,
+          risk: calcCategoryRisk((s) => s.costScore),
+          color: '#f59e0b',
+        },
+        {
+          name: 'Compliance Risk',
+          description: 'Regulatory, certifications, audits',
+          icon: this.ClipboardCheck,
+          risk: calcCategoryRisk((s) => s.complianceScore),
+          color: '#a855f7',
+        },
+        {
+          name: 'Capacity Risk',
+          description: 'Production capacity, scalability',
+          icon: this.Factory,
+          risk: 28,
+          color: '#ef4444',
+        },
+        {
+          name: 'Financial Risk',
+          description: 'Financial stability, credit rating',
+          icon: this.Briefcase,
+          risk: 22,
+          color: '#3b82f6',
+        },
+      ];
 
-    this.categories = raw.map((c) => ({
-      ...c,
-      level: this.getRiskLevel(c.risk),
-    }));
+      this.categories = raw.map((c) => ({
+        ...c,
+        level: this.getRiskLevel(c.risk),
+      }));
+      this.cdr.detectChanges();
+    });
   }
 
   getRiskLevel(risk: number): RiskLevel {

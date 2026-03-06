@@ -10,14 +10,14 @@
   <div class="mt-2 space-y-4">
     @for (a of list; track a.id) {
       <div class="flex items-start gap-3 rounded-lg bg-neutral-900/40 p-3 border border-neutral-800/60">
-        <div class="mt-0.5 rounded-full p-1.5" [class]="getRiskBgColor(a.severity)">
+        <div class="mt-0.5 rounded-full p-1.5" [class]="getRiskBgColor($any(a.severity))">
           <lucide-icon [img]="AlertTriangle" class="h-4 w-4"></lucide-icon>
         </div>
 
         <div class="flex-1 space-y-1">
           <div class="flex items-center justify-between gap-3">
             <p class="text-sm font-medium text-white">{{ a.title }}</p>
-            <span class="text-xs px-2 py-1 rounded-md border" [class]="getRiskBgColor(a.severity)">
+            <span class="text-xs px-2 py-1 rounded-md border" [class]="getRiskBgColor($any(a.severity))">
               {{ a.severity }}
             </span>
           </div>

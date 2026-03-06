@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupplierFiltersComponent } from '../components/suppliers/supplier-filters/supplier-filters';
 import { SuppliersTableComponent } from '../components/suppliers/suppliers-table/suppliers-table';
 import { SupplierDetailPanelComponent } from '../components/suppliers/supplier-detail-panel/supplier-detail-panel';
-import { Supplier, suppliers } from '../lib/data';
+import { SupplierService, Supplier } from '../services/supplier.service';
 
 @Component({
   selector: 'app-suppliers',
@@ -16,16 +16,33 @@ import { Supplier, suppliers } from '../lib/data';
   ],
   templateUrl: './suppliers.html',
 })
-export class SuppliersComponent {
+export class SuppliersComponent implements OnInit {
+  private supplierService = inject(SupplierService);
+  private cdr = inject(ChangeDetectorRef);
   
-  allSuppliers: Supplier[] = suppliers;
+  allSuppliers: Supplier[] = [];
   
   
-  filteredSuppliers: Supplier[] = suppliers;
+  filteredSuppliers: Supplier[] = [];
+  isLoading = true;
   
   
   selectedSupplier: Supplier | null = null;
 
+  ngOnInit() {
+    this.supplierService.getSuppliers().subscribe({
+      next: (data) => {
+        this.allSuppliers = data;
+        this.filteredSuppliers = data;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   onSelectSupplier(supplier: Supplier) {
     this.selectedSupplier = supplier;

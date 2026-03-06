@@ -1,9 +1,10 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { EChartsOption, graphic } from 'echarts';
+import { forkJoin } from 'rxjs';
 
-import { performanceHistory, riskTrends } from '../../../lib/data';
+import { PerformanceService, PerformanceMetric, RiskTrend } from '../../../services/performance.service';
 
 type TimeRange = '1m' | '3m' | '6m' | '1y';
 
@@ -13,14 +14,38 @@ type TimeRange = '1m' | '3m' | '6m' | '1y';
   imports: [CommonModule, NgxEchartsDirective],
   templateUrl: './performance-charts.html',
 })
-export class PerformanceChartsComponent implements OnChanges {
+export class PerformanceChartsComponent implements OnInit, OnChanges {
+  private performanceService = inject(PerformanceService);
+  private cdr = inject(ChangeDetectorRef);
+
   @Input() timeRange: TimeRange = '6m';
 
   trendOption: EChartsOption = {};
   riskOption: EChartsOption = {};
 
+  performanceHistory: PerformanceMetric[] = [];
+  riskTrends: RiskTrend[] = [];
+
+  ngOnInit() {
+    this.loadData();
+  }
+
   ngOnChanges(): void {
-    this.rebuild();
+    if (this.performanceHistory.length > 0 && this.riskTrends.length > 0) {
+      this.rebuild();
+    }
+  }
+
+  private loadData() {
+    forkJoin({
+      history: this.performanceService.getPerformanceHistory(),
+      trends: this.performanceService.getRiskTrends()
+    }).subscribe(({ history, trends }) => {
+      this.performanceHistory = history;
+      this.riskTrends = trends;
+      this.rebuild();
+      this.cdr.detectChanges();
+    });
   }
 
   private getCount(range: TimeRange): number {
@@ -33,8 +58,8 @@ export class PerformanceChartsComponent implements OnChanges {
   private rebuild(): void {
     const count = this.getCount(this.timeRange);
 
-    const ph = performanceHistory.slice(-count);
-    const rt = riskTrends.slice(-count);
+    const ph = this.performanceHistory.slice(-count);
+    const rt = this.riskTrends.slice(-count);
 
     // Common styles
     const axisLabel = { color: '#9ca3af', fontSize: 12 };

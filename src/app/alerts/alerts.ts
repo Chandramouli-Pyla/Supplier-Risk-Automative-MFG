@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { LucideAngularModule, Bell, AlertTriangle, Clock, CheckCircle2, ShieldAlert, Truck, ClipboardCheck, Briefcase, Factory, Eye, Play, Check, ChevronDown, X } from 'lucide-angular';
-import { alerts, Alert } from '../lib/data'; 
+import { AlertService, Alert } from '../services/alert.service';
 
 @Component({
   selector: 'app-alerts',
@@ -10,8 +10,11 @@ import { alerts, Alert } from '../lib/data';
   imports: [CommonModule, LucideAngularModule, FormsModule], 
   templateUrl: './alerts.html'
 })
-export class AlertsComponent {
-  readonly allAlerts = alerts;
+export class AlertsComponent implements OnInit {
+  private alertService = inject(AlertService);
+  private cdr = inject(ChangeDetectorRef);
+  allAlerts: Alert[] = [];
+  isLoading = true;
 
   readonly Bell = Bell;
   readonly AlertTriangle = AlertTriangle;
@@ -30,7 +33,36 @@ export class AlertsComponent {
   selectedType: string = '';
   selectedStatus: string = '';
 
+  ngOnInit() {
+    this.alertService.getAlerts().subscribe({
+      next: (data) => {
+        this.allAlerts = data;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
   
+  get newAlertsCount(): number {
+    return this.allAlerts.filter(a => a.status === 'new').length;
+  }
+
+  get acknowledgedAlertsCount(): number {
+    return this.allAlerts.filter(a => a.status === 'acknowledged').length;
+  }
+
+  get inProgressAlertsCount(): number {
+    return this.allAlerts.filter(a => a.status === 'in-progress').length;
+  }
+
+  get resolvedAlertsCount(): number {
+    return this.allAlerts.filter(a => a.status === 'resolved').length;
+  }
+
   get filteredAlerts(): Alert[] {
     return this.allAlerts.filter(alert => {
       const matchSeverity = this.selectedSeverity ? alert.severity === this.selectedSeverity : true;
@@ -76,6 +108,9 @@ export class AlertsComponent {
   }
 
   getTagClass(type: string, value: string): string {
+    if (!value) {
+      return 'bg-neutral-500/10 text-neutral-400 border border-neutral-500/20';
+    }
     const val = value.toLowerCase();
     if (val === 'critical' || val === 'high' || val === 'new') {
       return 'bg-red-500/10 text-red-500 border border-red-500/20';

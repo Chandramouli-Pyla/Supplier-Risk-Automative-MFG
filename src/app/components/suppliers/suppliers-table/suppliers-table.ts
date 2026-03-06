@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, AlertTriangle, ChevronRight } from 'lucide-angular';
-import { Supplier, getRiskColor, getStatusColor } from '../../../lib/data'; 
+import { getRiskColor, getStatusColor } from '../../../lib/data';
+import { Supplier } from '../../../services/supplier.service';
 
 @Component({
   selector: 'app-suppliers-table',
@@ -16,7 +17,6 @@ export class SuppliersTableComponent {
 
   readonly AlertTriangle = AlertTriangle;
   readonly ChevronRight = ChevronRight;
-
 
   getRiskColor(level: any): string {
     return getRiskColor(level);

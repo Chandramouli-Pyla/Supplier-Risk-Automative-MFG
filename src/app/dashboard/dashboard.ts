@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DashboardService, DashboardStats } from '../services/dashboard.service';
 
 import { KpiCardsComponent } from '../components/dashboard/kpi-cards/kpi-cards';
 import { RiskDistributionChartComponent } from '../components/dashboard/risk-distribution-chart/risk-distribution-chart';
@@ -20,4 +21,6 @@ import { RecentAlertsComponent } from '../components/dashboard/recent-alerts/rec
   ],
   templateUrl: './dashboard.html',
 })
-export class DashboardComponent {}
+export class DashboardComponent  {
+
+}

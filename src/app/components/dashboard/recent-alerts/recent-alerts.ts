@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule, AlertTriangle, ArrowRight } from 'lucide-angular';
 
-import { alerts, getRiskBgColor } from '../../../lib/data';
+import { getRiskBgColor } from '../../../lib/data';
+import { AlertService, Alert } from '../../../services/alert.service';
 
 @Component({
   selector: 'app-recent-alerts',
@@ -11,13 +12,23 @@ import { alerts, getRiskBgColor } from '../../../lib/data';
   imports: [CommonModule, RouterLink, LucideAngularModule],
   templateUrl: './recent-alerts.html',
 })
-export class RecentAlertsComponent {
+export class RecentAlertsComponent implements OnInit {
+  private alertService = inject(AlertService);
+  private cdr = inject(ChangeDetectorRef);
+
   readonly AlertTriangle = AlertTriangle;
   readonly ArrowRight = ArrowRight;
 
-  list = (alerts as any[]).slice(0, 5);
+  list: Alert[] = [];
 
-  getRiskBgColor = getRiskBgColor as any;
+  getRiskBgColor = getRiskBgColor;
+
+  ngOnInit() {
+    this.alertService.getAlerts().subscribe((data) => {
+      this.list = data.slice(0, 5);
+      this.cdr.detectChanges();
+    });
+  }
 
   formatDate(value: string): string {
     try {
