@@ -22,7 +22,7 @@ export interface SupplierAssessment {
 })
 export class RiskAssessmentService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/risk-assessment';
+  private apiUrl = 'https://supply-chain-backend-795019603251.us-central1.run.app/api/risk-assessment';
 
   getRiskCategories(): Observable<RiskCategory[]> {
     return this.http.get<RiskCategory[]>(`${this.apiUrl}/categories`);

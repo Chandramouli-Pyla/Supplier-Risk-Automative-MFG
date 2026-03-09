@@ -75,7 +75,7 @@ export interface DashboardStats {
 })
 export class DashboardService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/dashboard'; 
+  private apiUrl = 'https://supply-chain-backend-795019603251.us-central1.run.app/api/dashboard'; 
 
   getStats(): Observable<DashboardStats> {
     // Fetch as 'any' to handle the snake_case from the backend before mapping
